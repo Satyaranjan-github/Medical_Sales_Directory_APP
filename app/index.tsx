@@ -1,19 +1,17 @@
-import { StyleSheet, Text, useWindowDimensions, View } from "react-native";
+import { router } from "expo-router";
+import { Button, Text, View } from "react-native";
 
 export default function Index() {
-
-  const { height } = useWindowDimensions();
-
   return (
-    <View style={[styles.container, { height: height }]}>
-      <Text>bolo</Text>
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Text>Home Screen</Text>
+
+      <Button
+        title="Go to Brands"
+        onPress={() => router.push({
+          pathname: "/brands",
+        })}
+      />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "red",
-    flex: 1
-  }
-})
