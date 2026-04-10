@@ -1,3 +1,4 @@
+import { IBrand } from "../types/brand";
 import API from "./api";
 
 export const getBrands = async () => {
@@ -5,7 +6,12 @@ export const getBrands = async () => {
     return res.data;
 };
 
-export const createBrand = async (data: any) => {
+export const getBrandById = async ({ id }: { id: string }) => {
+    const res = await API.get("/brands/" + id);
+    return res.data;
+};
+
+export const createBrand = async (data: IBrand) => {
     const res = await API.post("/brands/create", data);
     return res.data;
 };
