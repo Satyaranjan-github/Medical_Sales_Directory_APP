@@ -1,20 +1,19 @@
-import { getMedicineById } from "@/src/services/medicineService";
-import { IMedicine } from "@/src/types/medicine";
-import { Entypo, Feather, FontAwesome5, FontAwesome6, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import { format } from "date-fns";
+import { getCategoryById } from "@/src/services/categoryService";
+import { ICategory } from "@/src/types/category";
+import { Feather, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Stack, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 
-export default function MedicineDetails() {
+export default function CategoryDetails() {
     const { id } = useLocalSearchParams<{ id: string }>();
-    const [medicine, setMedicine] = useState<IMedicine>();
+    const [category, setCategory] = useState<ICategory>();
     const [loading, setLoading] = useState(true);
 
-    const fetchMedicine = async () => {
+    const fetchCategory = async () => {
         try {
-            const data = await getMedicineById({ id })
-            setMedicine(data.data)
+            const data = await getCategoryById({ id })
+            setCategory(data.data)
         } catch (error) {
             console.log("Error:", error);
         } finally {
@@ -23,7 +22,7 @@ export default function MedicineDetails() {
     }
 
     useEffect(() => {
-        fetchMedicine();
+        fetchCategory();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
 
@@ -35,26 +34,26 @@ export default function MedicineDetails() {
         )
     }
 
-    if (!medicine) {
+    if (!category) {
         return (
             <View>
-                <Text>Medicine not found</Text>
+                <Text>Category not found</Text>
             </View>
         )
     }
 
     return (
         <>
-            <Stack.Screen options={{ title: "Medicine Details" }} />
+            <Stack.Screen options={{ title: "Category Details" }} />
             <View style={styles.container}>
-                <BasicInformation medicine={medicine} />
-                <AdditionalInformation medicine={medicine} />
+                <BasicInformation category={category} />
+                <AdditionalInformation category={category} />
             </View>
         </>
     );
 }
 
-const BasicInformation = ({ medicine }: { medicine: IMedicine }) => {
+const BasicInformation = ({ category }: { category: ICategory }) => {
     return (
         <View style={styles.card}>
             <View style={styles.headingIcon}>
@@ -66,50 +65,29 @@ const BasicInformation = ({ medicine }: { medicine: IMedicine }) => {
             <View style={styles.info}>
                 <MaterialCommunityIcons name="folder-edit-outline" size={24} color="black" />
                 <View>
-                    <Text> Medicine Name:</Text>
-                    <Text>{medicine.name}</Text>
+                    <Text> Category Name:</Text>
+                    <Text>{category.name}</Text>
                 </View>
             </View>
             <View style={styles.info}>
-                <FontAwesome6 name="indian-rupee-sign" size={24} color="black" />
+                <Feather name="check-square" size={24} color="black" />
                 <View>
-                    <Text>Cost:</Text>
-                    <Text>{medicine.cost}</Text>
-                </View>
-            </View>
-            <View style={styles.info}>
-                <Feather name="percent" size={24} color="black" />
-                <View>
-                    <Text>GST:</Text>
-                    <Text>{medicine.gst}%</Text>
-                </View>
-            </View>
-            <View style={styles.info}>
-                <MaterialIcons name="discount" size={24} color="black" />
-                <View>
-                    <Text>Discount:</Text>
-                    <Text>{medicine.discount}</Text>
-                </View>
-            </View>
-            <View style={styles.info}>
-                <Entypo name="calendar" size={24} color="black" />
-                <View>
-                    <Text>Expiry:</Text>
-                    <Text>{format(medicine.expiry, "dd/MM/yyyy")}</Text>
+                    <Text>Is Active:</Text>
+                    <Text>{category.isActive ? "Yes" : "No"}</Text>
                 </View>
             </View>
             <View style={styles.info}>
                 <MaterialCommunityIcons name="folder-edit-outline" size={24} color="black" />
                 <View>
                     <Text> Description:</Text>
-                    <Text>{medicine.description}</Text>
+                    <Text>{category.description}</Text>
                 </View>
             </View>
         </View >
     )
 }
 
-const AdditionalInformation = ({ medicine }: { medicine: IMedicine }) => {
+const AdditionalInformation = ({ category }: { category: ICategory }) => {
     return (
         <View style={styles.card}>
             <View style={styles.headingIcon}>
@@ -122,8 +100,8 @@ const AdditionalInformation = ({ medicine }: { medicine: IMedicine }) => {
                 <MaterialCommunityIcons name="clock-plus-outline" size={24} color="black" />
                 <View>
                     <Text> Created At:</Text>
-                    {medicine.createdAt && (
-                        <Text>{new Date(medicine.createdAt).toLocaleDateString()}</Text>
+                    {category.createdAt && (
+                        <Text>{new Date(category.createdAt).toLocaleDateString()}</Text>
                     )}
                 </View>
             </View>
@@ -131,17 +109,17 @@ const AdditionalInformation = ({ medicine }: { medicine: IMedicine }) => {
                 <MaterialCommunityIcons name="clock-plus-outline" size={24} color="black" />
                 <View>
                     <Text> Updated At:</Text>
-                    {medicine.updatedAt && (
-                        <Text>{new Date(medicine.updatedAt).toLocaleDateString()}</Text>
+                    {category.updatedAt && (
+                        <Text>{new Date(category.updatedAt).toLocaleDateString()}</Text>
                     )}
                 </View>
             </View>
-            {medicine.deletedAt && (
+            {category.deletedAt && (
                 <View style={styles.info}>
                     <MaterialCommunityIcons name="clock-plus-outline" size={24} color="black" />
                     <View>
                         <Text> Deleted At:</Text>
-                        <Text>{new Date(medicine.deletedAt).toLocaleDateString()}</Text>
+                        <Text>{new Date(category.deletedAt).toLocaleDateString()}</Text>
                     </View>
                 </View>
             )}
@@ -149,11 +127,9 @@ const AdditionalInformation = ({ medicine }: { medicine: IMedicine }) => {
     )
 }
 
-
 const styles = StyleSheet.create({
     container: {
         padding: 20,
-        gap: 10
     },
     card: {
         backgroundColor: "#fff",

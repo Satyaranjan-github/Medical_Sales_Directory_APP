@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         marginBottom: 10,
         borderBottomWidth: 1,
-        borderBottomColor: "#414451",
+        borderBottomColor: "#e8e8e8",
     },
 
     cost: {
