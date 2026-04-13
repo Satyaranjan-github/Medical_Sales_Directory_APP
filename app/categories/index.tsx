@@ -1,23 +1,23 @@
-import { getBrands } from "@/src/services/brandService";
-import { IBrand } from "@/src/types/brand";
-import { format } from "date-fns";
-import { router, Stack } from "expo-router";
-import { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { getCategories } from '@/src/services/categoryService';
+import { ICategory } from '@/src/types/category';
+import { format } from 'date-fns';
+import { router, Stack } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-export default function Brands() {
-    const [brands, setBrands] = useState<IBrand[]>([]);
+const Categories = () => {
+    const [categories, setCategories] = useState<ICategory[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetchBrands();
+        fetchCategories();
     }, []);
 
-    const fetchBrands = async () => {
+    const fetchCategories = async () => {
         try {
             setLoading(true);
-            const data = await getBrands();
-            setBrands(data.data);
+            const data = await getCategories();
+            setCategories(data.data);
         } catch (error) {
             console.log("Error:", error);
         } finally {
@@ -34,13 +34,13 @@ export default function Brands() {
     }
 
     return (
-        <View style={styles.container}>
-            <Stack.Screen options={{ title: "Brands" }} />
+        <View style={styles.container} >
+            <Stack.Screen options={{ title: "Categories" }} />
             <FlatList
-                data={brands}
+                data={categories}
                 renderItem={({ item }) => (
                     <TouchableOpacity onPress={() => router.push({
-                        pathname: "/brands/[id]",
+                        pathname: "/categories/[id]",
                         params: { id: item._id as string },
                     })}
                         style={styles.card}>
@@ -56,12 +56,14 @@ export default function Brands() {
                         </View>
                     </TouchableOpacity>
                 )}
-                ListEmptyComponent={<Text>No brands found</Text>}
+                ListEmptyComponent={<Text>No categories found</Text>}
 
             />
         </View>
-    );
+    )
 }
+
+export default Categories
 
 const styles = StyleSheet.create({
     container: {
